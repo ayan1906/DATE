@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date</title>
+  <link rel="stylesheet" href="./css/time.css">
+  <style>
+    /* The popup container */
+    .popup {
+      margin-top: 20px;
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      background-color: white;
+      color: rgba(253, 24, 83, 255);
+      border-radius: 8px;
+      border: 1px solid rgba(253, 24, 83, 255);
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: top 0.5s ease-in-out;
+    }
+
+    /* Show popup class */
+    .popup.show {
+      top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="time-text">
+    <h1>When are you free?</h1>
+  </div>
+
+  <!-- Form that sends data to Formspree -->
+  <form id="dateForm" action="https://formspree.io/f/xrbbokgn" method="POST">
+    <div class="input">
+      <input type="date" class="input-field" id="dateInput" name="date" required>
+      <input type="time" class="input-field" id="timeInput" name="time" required>
+    </div>
+    <button type="submit">Submit (づ￣ ³￣)づ</button>
+  </form>
+
+  <!-- Error Popup -->
+  <div class="popup" id="topPopup">
+    Please select both date and time 😭😭. (╥_╥)
+  </div>
+
+  <!-- Success Popup -->
+  <div class="popup" id="successPopup">
+    Thanks for your time. 🥰🥳
+  </div>
+
+  <script>
+    document.getElementById("dateForm").addEventListener("submit", function (event) {
+      const dateInput = document.getElementById("dateInput").value;
+      const timeInput = document.getElementById("timeInput").value;
+      const errorPopup = document.getElementById("topPopup");
+      const successPopup = document.getElementById("successPopup");
+
+      if (!dateInput || !timeInput) {
+        // Prevent submission if date/time is missing
+        event.preventDefault();
+        errorPopup.classList.add("show");
+
+        // Hide error popup after 3 seconds
+        setTimeout(() => {
+          errorPopup.classList.remove("show");
+        }, 3000);
+      } else {
+        event.preventDefault(); // Prevent form submission temporarily
+
+        // Show success popup
+        successPopup.classList.add("show");
+
+        // Submit the form using Fetch API
+        fetch("https://formspree.io/f/xrbbokgn", {
+          method: "POST",
+          body: new FormData(this),
+          headers: {
+            "Accept": "application/json"
+          }
+        }).then(response => {
+          if (response.ok) {
+            setTimeout(() => {
+              successPopup.classList.remove("show");
+              window.location.href = "yes2.html"; // Redirect after success
+            }, 2000);
+          }
+        }).catch(error => {
+          console.error("Form submission failed", error);
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <link rel="stylesheet" href="./css/time.css">
+  
+    
+</head>
+
+<body>
+  <div class="time-text">
+    <h1>When are you free?</h1>
+  </div>
+
+  <form id="dateForm">
+    <div class="input">
+      <input type="date" class="input-field" id="dateInput" name="date" required>
+      <input type="time" class="input-field" id="timeInput" name="time" required>
+    </div>
+    <button type="submit" id="submitButton">Submit (づ￣ ³￣)づ</button>
+  </form>
+
+  <!-- Error popup -->
+  <div class="popup" id="errorPopup">
+    Please select both date and time 😭😭. (╥_╥)
+  </div>
+
+  <!-- Success popup -->
+  <div class="popup" id="successPopup">
+    Thanks for your time. 🥰🥳
+  </div>
+
+
+</body>
+
+</html>
